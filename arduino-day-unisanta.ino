@@ -1,12 +1,12 @@
-
-
 /********************************************************
       Arduino Day Unisanta
         Código exemplo para introdução a IOT
+
      Palestrantes:
       Bruno Raphael
       Daniel Zanutto
-    Ultima alteração: 15/03/2019
+
+    Ultima alteração: 09/03/2019
 *********************************************************
 */
 
@@ -18,23 +18,23 @@
 
 ////////////////////////////////////////////////////////// VARIAVEIS MQTT
 
-#define ID_ALUNO          "nomeDupla"
+#define ID_ALUNO          "NOME-DE-USUARIO"
 #define MQTT_SUB_TOPIC    "zalms/arduinoday/"ID_ALUNO"/comandos"     //Topico para escuta
 #define MQTT_PUB_TOPIC    "zalms/arduinoday/"ID_ALUNO"/feedback"     //Topico para publicar
-#define MQTT_SERVER       "192.168.1.51"   //Endereço do Broker
-#define MQTT_SERVER_PORT  1883                                            //Porta do servidor
-#define MQTT_USER         "usuario"                                       //Usuario do Broker
-#define MQTT_PASSWORD     "huehuebr"                                      //Senha do Broker
+#define MQTT_SERVER       "IP-DO-SERVIDOR"                           //Endereço do Broker
+#define MQTT_SERVER_PORT  1883                                       //Porta do servidor
+#define MQTT_USER         "USUARIO-MQTT"                             //Usuario do Broker
+#define MQTT_PASSWORD     "SENHA-MQTT"                               //Senha do Broker
 
 ////////////////////////////////////////////////////////// VARIAVEIS MQTT
 
-const char* WIFI_SSID     = "nomedowifi";
-const char* WIFI_PASSWORD = "familia202330";
+const char* WIFI_SSID     = "NOME-REDE-WI-FI";
+const char* WIFI_PASSWORD = "SENHA-REDE-WI-FI";
 
 ////////////////////////////////////////////////////////// VARIAVEIS GLOBAIS
 
-DHTesp dht;                     //Instância do sensor DHT
-WiFiClient wifiClient;          //Instância do Cliente WiFi
+DHTesp dht;                           //Instância do sensor DHT
+WiFiClient wifiClient;                //Instância do Cliente WiFi
 PubSubClient mqttClient(wifiClient);  //Instância do Cliente MQTT
 
 ////////////////////////////////////////////////////////// MAIN SETUP
@@ -55,7 +55,7 @@ void setup() {
 void loop() {
 
   WiFiMQTTCheck();        //Verifica conexão WiFi e MQTT
-  mqttClient.loop();            //Mantém comunicação MQTT
+  mqttClient.loop();      //Mantém comunicação MQTT
 
 }
 
@@ -65,7 +65,8 @@ void loop() {
 */
 void sendReadings() {
 
-  String leituras = "{temperatura:" + getDHTTemperature() + ",umidade:" + getDHTHumidity() + "}";
+  String leituras = "{\"temperatura\":" + getDHTTemperature() + ",\"umidade\":" + getDHTHumidity() + "}";
+  Serial.println(leituras);
   mqttClient.publish("zalms/arduinoday/"ID_ALUNO"/feedback", leituras.c_str());
 
 }
@@ -211,4 +212,3 @@ void initIO() {
   dht.setup(14, DHTesp::DHT11);
 
 }
-
